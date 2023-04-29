@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:args/command_runner.dart';
 import 'package:mason_logger/mason_logger.dart';
+import 'package:solid_cli/src/res/directori_paths.dart';
 
 /// {@template sample_command}
 ///
@@ -23,6 +26,9 @@ class InitSOLIDCommand extends Command<int> {
   @override
   Future<int> run() async {
     var output = 'Initialized SOLID.';
+    DirectoryPaths.solidPathMap.forEach((key, pathStr) {
+      Directory(pathStr).createSync(recursive: true);
+    });
     _logger.info(output);
     return ExitCode.success.code;
   }
