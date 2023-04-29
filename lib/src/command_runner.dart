@@ -6,9 +6,12 @@ import 'package:pub_updater/pub_updater.dart';
 import 'package:solid_cli/src/commands/commands.dart';
 import 'package:solid_cli/src/version.dart';
 
+import 'commands/init_clean_solid_command.dart';
+
 const executableName = 'solid';
 const packageName = 'solid_cli';
-const description = 'The ultimate cli for developing flutter apps using SOLID principles.';
+const description =
+    'The ultimate cli for developing flutter apps using SOLID principles.';
 
 /// {@template solid_cli_command_runner}
 /// A [CommandRunner] for the CLI.
@@ -39,7 +42,8 @@ class SolidCliCommandRunner extends CompletionCommandRunner<int> {
       );
 
     // Add sub commands
-    addCommand(SampleCommand(logger: _logger));
+    addCommand(InitSOLIDCommand(logger: _logger));
+    addCommand(InitCleanSOLIDCommand(logger: _logger));
     addCommand(UpdateCommand(logger: _logger, pubUpdater: _pubUpdater));
   }
 
