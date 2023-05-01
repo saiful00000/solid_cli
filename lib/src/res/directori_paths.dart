@@ -1,37 +1,24 @@
 import 'dart:io';
+import 'package:path/path.dart' as path;
 
 class DirectoryPaths{
   DirectoryPaths._();
 
   static final solidPathMap = {
-    'screens': replaceAsExpected(path: './lib/screens'),
-    'models': replaceAsExpected(path: './lib/models'),
-    'services': replaceAsExpected(path: './lib/ services'),
-    'widgets': replaceAsExpected(path: './lib/widgets'),
-    'utils': replaceAsExpected(path: './lib/utils'),
-    'routes': replaceAsExpected(path: './lib/routes'),
-    'repositories': replaceAsExpected(path: './lib/repositories'),
-    'resources': replaceAsExpected(path: './lib/resources'),
+    'screens': path.join('.','lib','screens'),
+    'models': path.join('.','lib','models'),
+    'services': path.join('.','lib','services'),
+    'widgets': path.join('.','lib','widgets'),
+    'utils': path.join('.','lib','utils'),
+    'routes': path.join('.','lib','routes'),
+    'repositories': path.join('.','lib','repositories'),
+    'resources': path.join('.','lib','resources'),
   };
 
-
-  static String replaceAsExpected({required String path, String? replaceChar}) {
-    return path;
-    if (path.contains('\\')) {
-      if (Platform.isLinux || Platform.isMacOS) {
-        return path.replaceAll('\\', '/');
-      } else {
-        return path;
-      }
-    } else if (path.contains('/')) {
-      if (Platform.isWindows) {
-        return path.replaceAll('/', '\\\\');
-      } else {
-        return path;
-      }
-    } else {
-      return path;
-    }
-  }
+  static Map<String, String> screenPathMap({required String screenName}) => {
+    'screen': path.join('${solidPathMap['screens']}', screenName, 'ui'),
+    'controller': path.join('${solidPathMap['screens']}',screenName,'controller'),
+    'widget': path.join('${solidPathMap['screens']}',screenName,'widget'),
+  };
 
 }
