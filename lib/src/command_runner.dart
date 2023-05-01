@@ -6,6 +6,7 @@ import 'package:pub_updater/pub_updater.dart';
 import 'package:solid_cli/src/commands/commands.dart';
 import 'package:solid_cli/src/version.dart';
 
+import 'commands/create_command.dart';
 import 'commands/init_clean_solid_command.dart';
 
 const executableName = 'solid';
@@ -44,6 +45,7 @@ class SolidCliCommandRunner extends CompletionCommandRunner<int> {
     // Add sub commands
     addCommand(InitSOLIDCommand(logger: _logger));
     addCommand(InitCleanSOLIDCommand(logger: _logger));
+    addCommand(CreateCommand(logger: _logger));
     addCommand(UpdateCommand(logger: _logger, pubUpdater: _pubUpdater));
   }
 
