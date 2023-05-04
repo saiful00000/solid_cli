@@ -104,6 +104,10 @@ class DirectoryPaths {
     return {'controller': cleanApplicationDirectoryPaths['controllers']!};
   }
 
+  static Map<String, String> getCleanModelSpecificPaths(String serviceName){
+    return {'model': cleanDomainDirectoryPaths['models']!};
+  }
+
   static Map<String, String> getCleanRepositorySpecificPaths(String repositoryName){
 
     final interfaceBasePath = cleanDomainDirectoryPaths['repository']!;

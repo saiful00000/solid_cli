@@ -20,6 +20,11 @@ class CreateCleanCommand extends Command<int> {
         help: '',
       )
       ..addFlag(
+        'model',
+        abbr: 'm',
+        help: '',
+      )
+      ..addFlag(
         'repository',
         abbr: 'r',
         help: '',
@@ -46,6 +51,8 @@ class CreateCleanCommand extends Command<int> {
         return _createScreen(argResults?.rest.first);
       } else if (argResults?['controller'] == true) {
         return _createController(argResults?.rest.first);
+      } else if (argResults?['model'] == true) {
+        return _createModel(argResults?.rest.first);
       } else if (argResults?['repository'] == true) {
         return _createRepository(argResults?.rest.first);
       } else if (argResults?['service'] == true) {
@@ -107,6 +114,29 @@ class CreateCleanCommand extends Command<int> {
     return ExitCode.success.code;
   }
 
+  int _createModel(String? modelName) {
+    if (modelName == null || modelName.isEmpty) {
+      _logger.err(
+          'No name provided. Please provide name of your controller. ex: solid create-clean --controller controller_name');
+    }
+
+    DirectoryPaths.getCleanModelSpecificPaths(modelName!)
+        .forEach((key, value) {
+      Directory(value).createSync(recursive: true);
+      createDartFile(
+        directoryPath: value,
+        fileName: '${modelName}_$key',
+        fileContents: '',
+      );
+    });
+
+    _logger.success(
+      '$modelName model created successfully.',
+    );
+
+    return ExitCode.success.code;
+  }
+
   int _createRepository(String? repositoryName) {
     if (repositoryName == null || repositoryName.isEmpty) {
       _logger.err(
@@ -135,7 +165,6 @@ class CreateCleanCommand extends Command<int> {
       _logger.err(
           'No name provided. Please provide name of your service. ex: solid create-clean --service');
     }
-
 
     DirectoryPaths.getCleanServiceSpecificPaths(serviceName!)
         .forEach((key, directoryPath) {
