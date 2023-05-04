@@ -3,11 +3,15 @@ import 'dart:io';
 import 'package:args/command_runner.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:solid_cli/src/res/directori_paths.dart';
-import 'package:path/path.dart' as path;
 import 'package:solid_cli/src/utils/file_util.dart';
+import 'package:solid_cli/src/utils/project_type_util.dart';
+import 'package:solid_cli/src/validators/init_validator.dart';
 
 class CreateCleanCommand extends Command<int> {
-  CreateCleanCommand({required Logger logger}) : _logger = logger {
+  CreateCleanCommand(
+      {required Logger logger, required InitValidator initValidator})
+      : _logger = logger,
+        _initValidator = initValidator {
     argParser
       ..addFlag(
         'screen',
@@ -42,11 +46,23 @@ class CreateCleanCommand extends Command<int> {
   @override
   String get name => 'create-clean';
 
+  /// used for logging messages to the console
   final Logger _logger;
+
+  /// Validator to validate project initialization
+  final InitValidator _initValidator;
 
   @override
   Future<int> run() async {
     try {
+      var initialized = _initValidator.validateInitialization(
+        type: ProjectType.cleanSolid,
+      );
+
+      if(!initialized){
+        return ExitCode.cantCreate.code;
+      }
+
       if (argResults?['screen'] == true) {
         return _createScreen(argResults?.rest.first);
       } else if (argResults?['controller'] == true) {
@@ -59,9 +75,9 @@ class CreateCleanCommand extends Command<int> {
         return _createService(argResults?.rest.first);
       }
     } catch (error, stck) {
-      print('$error');
-      print('$stck');
-      _logger.err(error.toString());
+      _logger
+        ..err(error.toString())
+        ..err(stck.toString());
     }
     return ExitCode.noPerm.code;
   }
@@ -69,7 +85,9 @@ class CreateCleanCommand extends Command<int> {
   int _createScreen(String? screenName) {
     if (screenName == null || screenName.isEmpty) {
       _logger.err(
-          'No name provided. Please provide name of your screen. ex: solid create-clean --screen screen_name');
+        'No name provided. Please provide name of your screen.'
+        ' ex: solid create-clean --screen screen_name',
+      );
     }
 
     DirectoryPaths.getCleanScreenSpecificPaths(screenName!)
@@ -94,7 +112,9 @@ class CreateCleanCommand extends Command<int> {
   int _createController(String? controllerName) {
     if (controllerName == null || controllerName.isEmpty) {
       _logger.err(
-          'No name provided. Please provide name of your controller. ex: solid create-clean --controller controller_name');
+        'No name provided. Please provide name of your controller.'
+        ' ex: solid create-clean --controller controller_name',
+      );
     }
 
     DirectoryPaths.getCleanControllerSpecificPaths(controllerName!)
@@ -116,12 +136,11 @@ class CreateCleanCommand extends Command<int> {
 
   int _createModel(String? modelName) {
     if (modelName == null || modelName.isEmpty) {
-      _logger.err(
-          'No name provided. Please provide name of your controller. ex: solid create-clean --controller controller_name');
+      _logger.err('No name provided. Please provide name of your controller.'
+          ' ex: solid create-clean --controller controller_name,');
     }
 
-    DirectoryPaths.getCleanModelSpecificPaths(modelName!)
-        .forEach((key, value) {
+    DirectoryPaths.getCleanModelSpecificPaths(modelName!).forEach((key, value) {
       Directory(value).createSync(recursive: true);
       createDartFile(
         directoryPath: value,

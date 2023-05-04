@@ -4,6 +4,7 @@ import 'package:cli_completion/cli_completion.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:pub_updater/pub_updater.dart';
 import 'package:solid_cli/src/commands/commands.dart';
+import 'package:solid_cli/src/validators/init_validator.dart';
 import 'package:solid_cli/src/version.dart';
 
 import 'commands/solid/create_command.dart';
@@ -26,8 +27,13 @@ class SolidCliCommandRunner extends CompletionCommandRunner<int> {
   SolidCliCommandRunner({
     Logger? logger,
     PubUpdater? pubUpdater,
+    InitValidator? initValidator,
   })  : _logger = logger ?? Logger(),
         _pubUpdater = pubUpdater ?? PubUpdater(),
+        _initValidator = initValidator ??
+            InitValidator(
+              logger: logger ?? Logger(),
+            ),
         super(executableName, description) {
     // Add root options and flags
     argParser
@@ -45,8 +51,8 @@ class SolidCliCommandRunner extends CompletionCommandRunner<int> {
     // Add sub commands
     addCommand(InitCommand(logger: _logger));
     addCommand(InitCleanCommand(logger: _logger));
-    addCommand(CreateCommand(logger: _logger));
-    addCommand(CreateCleanCommand(logger: _logger));
+    addCommand(CreateCommand(logger: _logger, initValidator: _initValidator));
+    addCommand(CreateCleanCommand(logger: _logger, initValidator: _initValidator));
     addCommand(UpdateCommand(logger: _logger, pubUpdater: _pubUpdater));
   }
 
@@ -55,6 +61,7 @@ class SolidCliCommandRunner extends CompletionCommandRunner<int> {
 
   final Logger _logger;
   final PubUpdater _pubUpdater;
+  final InitValidator _initValidator;
 
   @override
   Future<int> run(Iterable<String> args) async {

@@ -4,9 +4,13 @@ import 'package:args/command_runner.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:solid_cli/src/res/directori_paths.dart';
 import 'package:solid_cli/src/utils/file_util.dart';
+import 'package:solid_cli/src/utils/project_type_util.dart';
+import 'package:solid_cli/src/validators/init_validator.dart';
 
 class CreateCommand extends Command<int> {
-  CreateCommand({required Logger logger}) : _logger = logger {
+  CreateCommand({required Logger logger, required InitValidator initValidator})
+      : _logger = logger,
+        _initValidator = initValidator {
     argParser
       ..addFlag(
         'screen',
@@ -36,6 +40,9 @@ class CreateCommand extends Command<int> {
   /// used for logging messages to the console
   final Logger _logger;
 
+  /// Validator to validate project initialization
+  final InitValidator _initValidator;
+
   @override
   String get description => 'Create scree, service, repositories and  others';
 
@@ -45,6 +52,14 @@ class CreateCommand extends Command<int> {
   @override
   Future<int> run() async {
     try {
+      var initialized = _initValidator.validateInitialization(
+        type: ProjectType.solid,
+      );
+
+      if(!initialized){
+        return ExitCode.cantCreate.code;
+      }
+
       if (argResults?['screen'] == true) {
         return _createScreen(argResults?.rest.first);
       } else if (argResults?['service'] == true) {
