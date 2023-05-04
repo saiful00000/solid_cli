@@ -82,12 +82,10 @@ class CreateCommand extends Command<int> {
             fileContents: '',
           );
         }
-
-        _logger.success(
-          '$screenName screen created successfully.',
-        );
       },
     );
+
+    _logger.success('$screenName screen created successfully.');
 
     return ExitCode.success.code;
   }

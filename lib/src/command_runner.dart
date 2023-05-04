@@ -46,6 +46,7 @@ class SolidCliCommandRunner extends CompletionCommandRunner<int> {
     addCommand(InitCommand(logger: _logger));
     addCommand(InitCleanCommand(logger: _logger));
     addCommand(CreateCommand(logger: _logger));
+    addCommand(CreateCleanCommand(logger: _logger));
     addCommand(UpdateCommand(logger: _logger, pubUpdater: _pubUpdater));
   }
 

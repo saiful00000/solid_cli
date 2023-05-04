@@ -17,24 +17,26 @@ class DirectoryPaths {
   };
 
   /// holds screen level directory paths
-  static Map<String, String> screenPathMap({required String screenName}) => {
+  static Map<String, String> screenPathMap({required String screenName}) =>
+      {
         'screen': path.join('${solidPathMap['screens']}', screenName, 'ui'),
         'controller':
-            path.join('${solidPathMap['screens']}', screenName, 'controller'),
+        path.join('${solidPathMap['screens']}', screenName, 'controller'),
         'widget': path.join('${solidPathMap['screens']}', screenName, 'widget'),
       };
 
   /// holds service level directory paths
-  static Map<String, String> servicePathMap({required String serviceName}) => {
+  static Map<String, String> servicePathMap({required String serviceName}) =>
+      {
         'service': path.join('${solidPathMap['services']}', serviceName),
       };
 
   /// holds repository level directory paths
   static Map<String, String> repositoryPathMap(
-          {required String repositoryName}) =>
+      {required String repositoryName}) =>
       {
         'repository':
-            path.join('${solidPathMap['repositories']}', repositoryName),
+        path.join('${solidPathMap['repositories']}', repositoryName),
       };
 
   /// --------------------------------------------------------------------------
@@ -83,8 +85,18 @@ class DirectoryPaths {
   static final cleanPresentationDirectoryPaths = {
     'screens': path.join(cleanSolidPathMap['presentation']!, 'screens'),
     'widgets': path.join(cleanSolidPathMap['presentation']!, 'widgets'),
-    'resources': path.join(cleanSolidPathMap['presentation']!, 'resources'),
+    'resource': path.join(cleanSolidPathMap['presentation']!, 'resources'),
   };
+
+  static Map<String, String> getCleanScreenSpecificPaths(String screenName) {
+    final screenBasePath = cleanPresentationDirectoryPaths['screens']!;
+    final controllerBasePath = cleanApplicationDirectoryPaths['controllers']!;
+    return {
+      'screen': path.join(screenBasePath, screenName, 'ui'),
+      'widget': path.join(screenBasePath, screenName, 'widget'),
+      'controller': path.join(controllerBasePath, screenName),
+    };
+  }
 
   static final cleanInitDirectoryPathsList = [
     cleanDataDirectoriesPaths,

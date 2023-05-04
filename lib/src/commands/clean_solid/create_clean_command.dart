@@ -1,5 +1,10 @@
+import 'dart:io';
+
 import 'package:args/command_runner.dart';
 import 'package:mason_logger/mason_logger.dart';
+import 'package:solid_cli/src/res/directori_paths.dart';
+import 'package:path/path.dart' as path;
+import 'package:solid_cli/src/utils/file_util.dart';
 
 class CreateCleanCommand extends Command<int> {
   CreateCleanCommand({required Logger logger}) : _logger = logger {
@@ -16,12 +21,11 @@ class CreateCleanCommand extends Command<int> {
       )
       ..addFlag(
         'repository',
-        abbr: 's',
+        abbr: 'r',
         help: '',
       )
       ..addFlag(
         'service',
-        abbr: 's',
         help: '',
       );
   }
@@ -56,18 +60,51 @@ class CreateCleanCommand extends Command<int> {
   }
 
   int _createScreen(String? screenName) {
-    return 0;
+    if (screenName == null || screenName.isEmpty) {
+      _logger.err(
+          'No name provided. Please provide name of your screen. ex: solid create-clean --screen screen_name');
+    }
+
+    DirectoryPaths.getCleanScreenSpecificPaths(screenName!)
+        .forEach((key, directoryPath) {
+      Directory(directoryPath).createSync(recursive: true);
+      if (key != 'widget') {
+        createDartFile(
+          directoryPath: directoryPath,
+          fileName: '${screenName}_$key',
+          fileContents: '',
+        );
+      }
+    });
+
+    _logger.success(
+      '$screenName screen created successfully.',
+    );
+
+    return ExitCode.success.code;
   }
 
   int _createController(String? controllerName) {
-    return 0;
+    if (controllerName == null || controllerName.isEmpty) {
+      _logger.err(
+          'No name provided. Please provide name of your controller. ex: solid create-clean --controller controller_name');
+    }
+    return ExitCode.success.code;
   }
 
   int _createRepository(String? repositoryName) {
-    return 0;
+    if (repositoryName == null || repositoryName.isEmpty) {
+      _logger.err(
+          'No name provided. Please provide name of your repository. ex: solid create-clean --repository repository_name');
+    }
+    return ExitCode.success.code;
   }
 
   int _createService(String? serviceName) {
-    return 0;
+    if (serviceName == null || serviceName.isEmpty) {
+      _logger.err(
+          'No name provided. Please provide name of your service. ex: solid create-clean --service');
+    }
+    return ExitCode.success.code;
   }
 }
