@@ -59,8 +59,18 @@ class CreateCleanCommand extends Command<int> {
         type: ProjectType.cleanSolid,
       );
 
-      if(!initialized){
+      if (!initialized) {
         return ExitCode.cantCreate.code;
+      }
+
+      if (argResults?.rest.isEmpty ?? false) {
+        _logger.warn(
+          '''
+Resource name is not given, Provide resource name
+ex: solid create-clean --service service_name
+          ''',
+        );
+        return ExitCode.noInput.code;
       }
 
       if (argResults?['screen'] == true) {

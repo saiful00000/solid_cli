@@ -41,14 +41,15 @@ class InitValidator {
         } else {
           if (isCleanInitialized()) {
             _logger.warn(
-              'Your project is initialized with Clean architecture.'
-              ' Please do command for clean architecture. See documentation'
-                  ' on ${AppStrings.documentationUrl}',
+              '''
+Your project is initialized with Clean architecture. Please do command for clean architecture.
+Or see documentation on ${AppStrings.documentationUrl}''',
             );
           } else {
             _logger.warn(
-              'You must initialize you project before try to creating'
-              ' resources. See documentation on ${AppStrings.documentationUrl}',
+              '''
+You must initialize you project before try to creating resources.
+Or see documentation on ${AppStrings.documentationUrl}''',
             );
           }
           return false;
@@ -59,15 +60,15 @@ class InitValidator {
         } else {
           if (isInitialized()) {
             _logger.warn(
-              'Your project is initialized with basic SOLID architecture.'
-                  ' Please do command for SOLID architecture. See documentation'
-                  ' on ${AppStrings.documentationUrl}',
+              '''
+Your project is initialized with basic SOLID architecture. Please do command for SOLID architecture.
+Or see documentation on ${AppStrings.documentationUrl}''',
             );
           } else {
             _logger.warn(
-              'You must initialize you project before try to creating'
-                  ' resources. See documentation on '
-                  '${AppStrings.documentationUrl}',
+              '''
+You must initialize you project before try to creating resources.
+Or see documentation on ${AppStrings.documentationUrl}''',
             );
           }
           return false;

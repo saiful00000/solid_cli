@@ -56,8 +56,16 @@ class CreateCommand extends Command<int> {
         type: ProjectType.solid,
       );
 
-      if(!initialized){
+      if (!initialized) {
         return ExitCode.cantCreate.code;
+      }
+
+      if (argResults?.rest.isEmpty ?? false) {
+        _logger.warn('''
+Resource name is not given, please provide resource name.
+ex: solid create --service service_name
+          ''');
+        return ExitCode.noInput.code;
       }
 
       if (argResults?['screen'] == true) {
