@@ -8,9 +8,10 @@ import 'package:solid_cli/src/utils/project_type_util.dart';
 import 'package:solid_cli/src/validators/init_validator.dart';
 
 class CreateCleanCommand extends Command<int> {
-  CreateCleanCommand(
-      {required Logger logger, required InitValidator initValidator})
-      : _logger = logger,
+  CreateCleanCommand({
+    required Logger logger,
+    required InitValidator initValidator,
+  })  : _logger = logger,
         _initValidator = initValidator {
     argParser
       ..addFlag(
@@ -55,7 +56,7 @@ class CreateCleanCommand extends Command<int> {
   @override
   Future<int> run() async {
     try {
-      var initialized = _initValidator.validateInitialization(
+      final initialized = _initValidator.validateInitialization(
         type: ProjectType.cleanSolid,
       );
 
@@ -169,7 +170,8 @@ ex: solid create-clean --service service_name
   int _createRepository(String? repositoryName) {
     if (repositoryName == null || repositoryName.isEmpty) {
       _logger.err(
-          'No name provided. Please provide name of your repository. ex: solid create-clean --repository repository_name');
+          'No name provided. Please provide name of your repository.'
+              ' ex: solid create-clean --repository repository_name');
     }
 
     DirectoryPaths.getCleanRepositorySpecificPaths(repositoryName!)

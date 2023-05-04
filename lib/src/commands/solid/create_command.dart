@@ -19,6 +19,12 @@ class CreateCommand extends Command<int> {
         help: 'Create a screen contains controller and other necessary things',
       )
       ..addFlag(
+        'model',
+        negatable: false,
+        abbr: 'm',
+        help: 'Create a controller',
+      )
+      ..addFlag(
         'service',
         negatable: false,
         help: '''
@@ -70,6 +76,8 @@ ex: solid create --service service_name
 
       if (argResults?['screen'] == true) {
         return _createScreen(argResults?.rest.first);
+      } else if (argResults?['model'] == true) {
+        return _createModel(argResults?.rest.first);
       } else if (argResults?['service'] == true) {
         return _createService(argResults?.rest.first);
       } else if (argResults?['repository'] == true) {
@@ -109,6 +117,33 @@ ex: solid create --service service_name
     );
 
     _logger.success('$screenName screen created successfully.');
+
+    return ExitCode.success.code;
+  }
+
+  int _createModel(String? screenName) {
+    if (screenName == null || screenName.isEmpty) {
+      _logger.err(
+          'No name provided. ex: solid create --model model_name');
+      return ExitCode.noPerm.code;
+    }
+
+    /// create screen related directories
+    DirectoryPaths.controllerPathMap(screenName: screenName).forEach(
+      (key, value) {
+        /// create the directory
+        Directory(value).createSync(recursive: true);
+
+        /// create required dart files
+        createDartFile(
+          directoryPath: value,
+          fileName: '${screenName}_$key',
+          fileContents: '',
+        );
+      },
+    );
+
+    _logger.success('$screenName model created successfully.');
 
     return ExitCode.success.code;
   }
