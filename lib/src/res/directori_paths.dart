@@ -85,4 +85,11 @@ class DirectoryPaths {
     'widgets': path.join(cleanSolidPathMap['presentation']!, 'widgets'),
     'resources': path.join(cleanSolidPathMap['presentation']!, 'resources'),
   };
+
+  static final cleanInitDirectoryPathsList = [
+    cleanDataDirectoriesPaths,
+    cleanDomainDirectoryPaths,
+    cleanApplicationDirectoryPaths,
+    cleanPresentationDirectoryPaths,
+  ];
 }
