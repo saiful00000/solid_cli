@@ -79,6 +79,8 @@ class DirectoryPaths {
   static final cleanApplicationDirectoryPaths = {
     'controllers': path.join(cleanSolidPathMap['application']!, 'controllers'),
     'usecases': path.join(cleanSolidPathMap['application']!, 'usecases'),
+    'repository': path.join(cleanSolidPathMap['application']!, 'usecases', 'repository'),
+    'services': path.join(cleanSolidPathMap['application']!, 'usecases', 'services'),
   };
 
   /// holds directory paths for presentation layer
@@ -95,6 +97,36 @@ class DirectoryPaths {
       'screen': path.join(screenBasePath, screenName, 'ui'),
       'widget': path.join(screenBasePath, screenName, 'widget'),
       'controller': path.join(controllerBasePath, screenName),
+    };
+  }
+
+  static Map<String, String> getCleanControllerSpecificPaths(String serviceName){
+    return {'controller': cleanApplicationDirectoryPaths['controllers']!};
+  }
+
+  static Map<String, String> getCleanRepositorySpecificPaths(String repositoryName){
+
+    final interfaceBasePath = cleanDomainDirectoryPaths['repository']!;
+    final implementationBasePath = cleanDataDirectoriesPaths['repository']!;
+    final usecasesBasePath = cleanApplicationDirectoryPaths['repository']!;
+
+    return {
+      'repo_interface': path.join(interfaceBasePath, repositoryName),
+      'repository': path.join(implementationBasePath, repositoryName),
+      'repository_usecase': path.join(usecasesBasePath, repositoryName),
+    };
+  }
+
+  static Map<String, String> getCleanServiceSpecificPaths(String serviceName){
+
+    final interfaceBasePath = cleanDomainDirectoryPaths['services']!;
+    final implementationBasePath = cleanDataDirectoriesPaths['services']!;
+    final usecasesBasePath = cleanApplicationDirectoryPaths['services']!;
+
+    return {
+      'service_interface': path.join(interfaceBasePath, serviceName),
+      'service': path.join(implementationBasePath, serviceName),
+      'service_usecase': path.join(usecasesBasePath, serviceName),
     };
   }
 

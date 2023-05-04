@@ -89,6 +89,21 @@ class CreateCleanCommand extends Command<int> {
       _logger.err(
           'No name provided. Please provide name of your controller. ex: solid create-clean --controller controller_name');
     }
+
+    DirectoryPaths.getCleanControllerSpecificPaths(controllerName!)
+        .forEach((key, value) {
+      Directory(value).createSync(recursive: true);
+      createDartFile(
+        directoryPath: value,
+        fileName: '${controllerName}_$key',
+        fileContents: '',
+      );
+    });
+
+    _logger.success(
+      '$controllerName controller created successfully.',
+    );
+
     return ExitCode.success.code;
   }
 
@@ -97,6 +112,21 @@ class CreateCleanCommand extends Command<int> {
       _logger.err(
           'No name provided. Please provide name of your repository. ex: solid create-clean --repository repository_name');
     }
+
+    DirectoryPaths.getCleanRepositorySpecificPaths(repositoryName!)
+        .forEach((key, directoryPath) {
+      Directory(directoryPath).createSync(recursive: true);
+      createDartFile(
+        directoryPath: directoryPath,
+        fileName: '${repositoryName}_$key',
+        fileContents: '',
+      );
+    });
+
+    _logger.success(
+      '$repositoryName repository created successfully.',
+    );
+
     return ExitCode.success.code;
   }
 
@@ -105,6 +135,22 @@ class CreateCleanCommand extends Command<int> {
       _logger.err(
           'No name provided. Please provide name of your service. ex: solid create-clean --service');
     }
+
+
+    DirectoryPaths.getCleanServiceSpecificPaths(serviceName!)
+        .forEach((key, directoryPath) {
+      Directory(directoryPath).createSync(recursive: true);
+      createDartFile(
+        directoryPath: directoryPath,
+        fileName: '${serviceName}_$key',
+        fileContents: '',
+      );
+    });
+
+    _logger.success(
+      '$serviceName service created successfully.',
+    );
+
     return ExitCode.success.code;
   }
 }
