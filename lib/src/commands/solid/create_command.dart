@@ -21,7 +21,8 @@ class CreateCommand extends Command<int> {
               Create a service module consists of an
               interface and an implementation class.
               ''',
-      )..addFlag(
+      )
+      ..addFlag(
         'repository',
         abbr: 'r',
         negatable: false,
@@ -36,7 +37,7 @@ class CreateCommand extends Command<int> {
   final Logger _logger;
 
   @override
-  String get description => 'Create scree, service, or others';
+  String get description => 'Create scree, service, repositories and  others';
 
   @override
   String get name => 'create';
@@ -48,7 +49,7 @@ class CreateCommand extends Command<int> {
         return _createScreen(argResults?.rest.first);
       } else if (argResults?['service'] == true) {
         return _createService(argResults?.rest.first);
-      }else if(argResults?['repository'] == true){
+      } else if (argResults?['repository'] == true) {
         return _createRepository(argResults?.rest.first);
       }
     } catch (error, stck) {
@@ -115,6 +116,7 @@ class CreateCommand extends Command<int> {
         fileName: '${serviceName}_interface',
         fileContents: '',
       );
+
       /// create the implementation file
       createDartFile(
         directoryPath: servicePath,
@@ -133,7 +135,7 @@ class CreateCommand extends Command<int> {
     if (repositoryName == null || repositoryName.isEmpty) {
       _logger.err(
         'No name provided for the repository. Ex: solid create --repository '
-            'repository_name',
+        'repository_name',
       );
       return ExitCode.noPerm.code;
     }
@@ -151,6 +153,7 @@ class CreateCommand extends Command<int> {
         fileName: '${repositoryName}_repo_interface',
         fileContents: '',
       );
+
       /// create the implementation file
       createDartFile(
         directoryPath: servicePath,

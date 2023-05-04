@@ -4,14 +4,14 @@ import 'package:args/command_runner.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:solid_cli/src/res/directori_paths.dart';
 
-/// {@template sample_command}
+/// {@template init_command}
 ///
-/// `solid sample`
-/// A [Command] to exemplify a sub command
+/// `solid init`
+/// A [Command] to initialize solid directory structure
 /// {@endtemplate}
-class InitSOLIDCommand extends Command<int> {
-  /// {@macro sample_command}
-  InitSOLIDCommand({
+class InitCommand extends Command<int> {
+  /// {@macro init_command}
+  InitCommand({
     required Logger logger,
   }) : _logger = logger;
 
@@ -19,7 +19,7 @@ class InitSOLIDCommand extends Command<int> {
   String get description => 'Initialize solid principle.';
 
   @override
-  String get name => 'init-solid';
+  String get name => 'init';
 
   final Logger _logger;
 
@@ -29,7 +29,7 @@ class InitSOLIDCommand extends Command<int> {
     DirectoryPaths.solidPathMap.forEach((key, pathStr) {
       Directory(pathStr).createSync(recursive: true);
     });
-    _logger.info(output);
+    _logger.success(output);
     return ExitCode.success.code;
   }
 }

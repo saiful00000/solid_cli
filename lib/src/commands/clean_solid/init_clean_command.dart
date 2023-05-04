@@ -4,15 +4,15 @@ import 'package:args/command_runner.dart';
 import 'package:mason_logger/mason_logger.dart';
 import 'package:solid_cli/src/res/directori_paths.dart';
 
-class InitCleanSOLIDCommand extends Command<int> {
-  InitCleanSOLIDCommand({required Logger logger}) : _logger = logger;
+class InitCleanCommand extends Command<int> {
+  InitCleanCommand({required Logger logger}) : _logger = logger;
 
   @override
   String get description => 'Initialize solid principle with clean '
       'architectural design pattern.';
 
   @override
-  String get name => 'init-clean-solid';
+  String get name => 'init-clean';
 
   final Logger _logger;
 
@@ -27,7 +27,7 @@ class InitCleanSOLIDCommand extends Command<int> {
     });
 
 
-    _logger.info(output);
+    _logger.success(output);
     return ExitCode.success.code;
   }
 }
