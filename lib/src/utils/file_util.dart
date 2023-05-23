@@ -11,3 +11,16 @@ void createDartFile(
       fileContents,
     );
 }
+
+String fileNameToClassName(String fileName) {
+  final words = fileName.split('_');
+
+  for (var i = 0; i < words.length; i++) {
+    final word = words[i];
+    final firstLetter = word.substring(0, 1).toUpperCase();
+    final remainingLetters = word.substring(1);
+    words[i] = '$firstLetter$remainingLetters';
+  }
+
+  return words.join();
+}

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:mason_logger/mason_logger.dart';
+import 'package:solid_cli/src/code_contents/code_contents.dart';
 import 'package:solid_cli/src/res/directori_paths.dart';
 import 'package:solid_cli/src/utils/file_util.dart';
 import 'package:solid_cli/src/utils/project_type_util.dart';
@@ -105,12 +106,22 @@ ex: solid create --service service_name
       (key, value) {
         /// create the directory
         Directory(value).createSync(recursive: true);
-        if (key != 'widget') {
-          /// create required dart files
+        if (key == 'screen') {
           createDartFile(
             directoryPath: value,
             fileName: '${screenName}_$key',
-            fileContents: '',
+            fileContents: CodeContents.getScreenContent(
+              screenName: '${screenName}_$key',
+              controllerName: '${screenName}_controller',
+            ),
+          );
+        }else if(key == 'controller'){
+          createDartFile(
+            directoryPath: value,
+            fileName: '${screenName}_$key',
+            fileContents: CodeContents.getControllerContent(
+              controllerName: '${screenName}_$key',
+            ),
           );
         }
       },
@@ -123,8 +134,7 @@ ex: solid create --service service_name
 
   int _createModel(String? screenName) {
     if (screenName == null || screenName.isEmpty) {
-      _logger.err(
-          'No name provided. ex: solid create --model model_name');
+      _logger.err('No name provided. ex: solid create --model model_name');
       return ExitCode.noPerm.code;
     }
 
@@ -165,19 +175,27 @@ ex: solid create --service service_name
       /// create the service directory with provided [serviceName]
       Directory(servicePath).createSync(recursive: true);
 
+      final fileName = '${serviceName}_service';
+      final interfaceName = '${serviceName}_interface';
+
       /// create required dart files for the service [serviceName]
       /// create the interface
       createDartFile(
         directoryPath: servicePath,
-        fileName: '${serviceName}_interface',
-        fileContents: '',
+        fileName: interfaceName,
+        fileContents: CodeContents.getRepositoryInterfaceContent(
+          interfaceName: interfaceName,
+        ),
       );
 
       /// create the implementation file
       createDartFile(
         directoryPath: servicePath,
-        fileName: '${serviceName}_service',
-        fileContents: '',
+        fileName: fileName,
+        fileContents: CodeContents.getRepositoryClassContent(
+          fileName: fileName,
+          interfaceName: interfaceName,
+        ),
       );
     });
 
@@ -202,19 +220,27 @@ ex: solid create --service service_name
       /// create the service directory with provided [serviceName]
       Directory(servicePath).createSync(recursive: true);
 
+      final fileName = '${repositoryName}_repository';
+      final interfaceName = '${repositoryName}_repo_interface';
+
       /// create required dart files for the service [serviceName]
       /// create the interface
       createDartFile(
         directoryPath: servicePath,
-        fileName: '${repositoryName}_repo_interface',
-        fileContents: '',
+        fileName: interfaceName,
+        fileContents: CodeContents.getRepositoryInterfaceContent(
+          interfaceName: interfaceName,
+        ),
       );
 
       /// create the implementation file
       createDartFile(
         directoryPath: servicePath,
-        fileName: '${repositoryName}_repository',
-        fileContents: '',
+        fileName: fileName,
+        fileContents: CodeContents.getRepositoryClassContent(
+          fileName: fileName,
+          interfaceName: interfaceName,
+        ),
       );
     });
 
